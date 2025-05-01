@@ -31,7 +31,7 @@ public class MqListener {
 	}
 
 	@RabbitListener(queues = {"${queue.name.listener}"})
-	public void receive(@Payload String message) throws JsonMappingException, JsonProcessingException {
+	public void receive(@Payload String message) throws JsonProcessingException {
 		OrderDTO orderDTO = objectMapper.readValue(message, OrderDTO.class);
 		Order order = new Order(orderDTO.id(), 
 				orderDTO.orderNumber(),
