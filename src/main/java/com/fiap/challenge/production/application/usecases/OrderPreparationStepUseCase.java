@@ -5,7 +5,7 @@ import com.fiap.challenge.production.application.domain.models.Order;
 public interface OrderPreparationStepUseCase {
 	
 	void receivedOrder(Order order);
-	void inPrepareOrder(Long orderNumber);
-	void readyOrder(Long orderNumber);
-	void finishOrder(Long orderNumber);
+	Order inPrepareOrder(Long orderNumber);
+	Order readyOrder(Long orderNumber);
+	Order finishOrder(Long orderNumber);
 }

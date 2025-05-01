@@ -10,8 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fiap.challenge.production.application.domain.models.Order;
 import com.fiap.challenge.production.application.domain.models.enums.OrderStatusEnum;
-import com.fiap.challenge.production.infra.database.service.ProductionService;
 import com.fiap.challenge.production.infra.models.dto.OrderDTO;
+import com.fiap.challenge.production.infra.service.ProductionService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,7 +35,10 @@ public class MqListener {
 		OrderDTO orderDTO = objectMapper.readValue(message, OrderDTO.class);
 		Order order = new Order(orderDTO.id(), 
 				orderDTO.orderNumber(),
-				OrderStatusEnum.RECEBIDO);
+				OrderStatusEnum.RECEBIDO,
+				orderDTO.total(),
+				orderDTO.products()
+				);
 		log.info("Order received: {}", order.toString());
 		productionService.receivedOrder(order);
 	}

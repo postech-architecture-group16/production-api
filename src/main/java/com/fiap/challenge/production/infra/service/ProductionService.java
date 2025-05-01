@@ -1,4 +1,4 @@
-package com.fiap.challenge.production.infra.database.service;
+package com.fiap.challenge.production.infra.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,33 +24,29 @@ public class ProductionService implements OrderPreparationStepUseCase{
 		productionEntity.setOrderId(order.getId());
 		productionEntity.setOrderNumber(order.getOrderNumber());
 		productionEntity.setOrderStatus(order.getOrderStatus());
+		productionEntity.setTotal(order.getTotal());
+		productionEntity.setProducts(order.getProducts());
 		productionRepository.save(productionEntity);
 	}
 	@Override
-	public void inPrepareOrder(Long orderNumber) {
+	public Order inPrepareOrder(Long orderNumber) {
 		ProductionEntity productionEntity = productionRepository.findByOrderNumber(orderNumber);
-		if (productionEntity != null) {
 			productionEntity.setOrderStatus(OrderStatusEnum.EM_PREPARACAO);
-			productionRepository.save(productionEntity);
-		}
+		return productionRepository.save(productionEntity).toOrder();
 	}
 
 	@Override
-	public void readyOrder(Long orderNumber) {
+	public Order readyOrder(Long orderNumber) {
 		ProductionEntity productionEntity = productionRepository.findByOrderNumber(orderNumber);
-		if (productionEntity != null) {
 			productionEntity.setOrderStatus(OrderStatusEnum.PRONTO);
-			productionRepository.save(productionEntity);
-		}
+			return productionRepository.save(productionEntity).toOrder();
 	}
 
 	@Override
-	public void finishOrder(Long orderNumber) {
+	public Order finishOrder(Long orderNumber) {
 		ProductionEntity productionEntity = productionRepository.findByOrderNumber(orderNumber);
-		if (productionEntity != null) {
 			productionEntity.setOrderStatus(OrderStatusEnum.FINALIZADO);
-			productionRepository.save(productionEntity);
-		}
+			return productionRepository.save(productionEntity).toOrder();
 	}
 
 }
