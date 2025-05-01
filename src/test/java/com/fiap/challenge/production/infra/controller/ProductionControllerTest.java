@@ -32,7 +32,7 @@ class ProductionControllerTest {
 
 
     @Test
-    void shouldReceiveOrderSuccessfully() throws Exception {
+    void shouldReceiveOrderSuccessfully() {
         Order order = new Order(
             UUID.randomUUID(),
             2L,
@@ -45,12 +45,12 @@ class ProductionControllerTest {
         
 		ResponseEntity<Order> response = productionController.inPrepareOrder(2L);
         
-		Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
-        Assertions.assertEquals(response.getBody().getOrderStatus(), OrderStatusEnum.EM_PREPARACAO);
+		Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(OrderStatusEnum.EM_PREPARACAO, response.getBody().getOrderStatus());
     }
     
     @Test
-    void shouldReadyOrderSuccessfully() throws Exception {
+    void shouldReadyOrderSuccessfully()  {
         Order order = new Order(
             UUID.randomUUID(),
             2L,
@@ -64,11 +64,11 @@ class ProductionControllerTest {
         ResponseEntity<Order> response = productionController.readyOrder(2L);
         
     	Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
-        Assertions.assertEquals(order.getOrderStatus(), OrderStatusEnum.PRONTO);
+        Assertions.assertEquals(OrderStatusEnum.PRONTO, order.getOrderStatus());
     }
     
     @Test
-    void shouldFinishedOrderSuccessfully() throws Exception {
+    void shouldFinishedOrderSuccessfully() {
         Order order = new Order(
             UUID.randomUUID(),
             2L,
@@ -81,8 +81,8 @@ class ProductionControllerTest {
         
         ResponseEntity<Order> response = productionController.finishOrder(2L);
         
-    	Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
-        Assertions.assertEquals(order.getOrderStatus(), OrderStatusEnum.FINALIZADO);
+    	Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(OrderStatusEnum.FINALIZADO, order.getOrderStatus());
     }
 
 }
