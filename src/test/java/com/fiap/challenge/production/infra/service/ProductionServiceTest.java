@@ -35,16 +35,29 @@ class ProductionServiceTest {
     private ProductionService productionService;
 
     private Order mockOrder;
+    private OrderProduct mockOrderProduct;
     private ProductionEntity mockEntity;
 
     @BeforeEach
     void setUp() {
+    	mockOrderProduct = new OrderProduct();
+    	mockOrderProduct.setProductId(UUID.randomUUID());
+    	mockOrderProduct.setPrice(BigDecimal.valueOf(50.00));
+    	mockOrderProduct.setProductName("Product A");
+    	mockOrderProduct.setCreatedAt(LocalDateTime.now());
+    	
+    	OrderProduct mockOrderProduct2 = new OrderProduct(
+    			mockOrderProduct.getProductId(), 
+    			mockOrderProduct.getPrice(), 
+    			mockOrderProduct.getProductName(), 
+    			mockOrderProduct.getCreatedAt());
+    	
         mockOrder =  new Order(
                 UUID.randomUUID(),
                 2L,
                 OrderStatusEnum.EM_PREPARACAO,
                 BigDecimal.valueOf(100.00),
-                List.of(new OrderProduct(UUID.randomUUID(), BigDecimal.valueOf(50.00), "Product A", LocalDateTime.now()))
+                List.of(mockOrderProduct, mockOrderProduct2)
             );
 
         mockEntity = new ProductionEntity();

@@ -135,7 +135,7 @@
 						</goals>
 						<configuration>
 							<excludes>
-								<exclude>com/fiap/challenge/order/OrderApiApplication.class</exclude>
+								<exclude>com/fiap/challenge/production/ProductionApiApplication.class</exclude>
 							</excludes>
 						</configuration>
 					</execution>
