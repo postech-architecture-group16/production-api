@@ -63,7 +63,7 @@ class ProductionControllerTest {
         
         ResponseEntity<Order> response = productionController.readyOrder(2L);
         
-    	Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
+    	Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals(OrderStatusEnum.PRONTO, order.getOrderStatus());
     }
     
