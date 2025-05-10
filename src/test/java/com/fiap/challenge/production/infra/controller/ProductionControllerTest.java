@@ -3,6 +3,7 @@ package com.fiap.challenge.production.infra.controller;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Assertions;
@@ -83,6 +84,30 @@ class ProductionControllerTest {
         
     	Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals(OrderStatusEnum.FINALIZADO, order.getOrderStatus());
+    }
+    
+    @Test
+    void shouldListOrdersPrepareAndReadySuccessfully() {
+        // Mock data
+        Map<OrderStatusEnum, List<Long>> mockResponse = Map.of(
+            OrderStatusEnum.EM_PREPARACAO, List.of(1L, 2L),
+            OrderStatusEnum.PRONTO, List.of(3L)
+        );
+
+        // Mock service behavior
+        Mockito.when(productionService.listOrdersPrepareAndReady()).thenReturn(mockResponse);
+
+        // Call the controller method
+        ResponseEntity<Map<OrderStatusEnum, List<Long>>> response = productionController.getOrders();
+
+        // Assertions
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertNotNull(response.getBody());
+        Assertions.assertEquals(2, response.getBody().get(OrderStatusEnum.EM_PREPARACAO).size());
+        Assertions.assertEquals(1, response.getBody().get(OrderStatusEnum.PRONTO).size());
+        Assertions.assertTrue(response.getBody().get(OrderStatusEnum.EM_PREPARACAO).contains(1L));
+        Assertions.assertTrue(response.getBody().get(OrderStatusEnum.EM_PREPARACAO).contains(2L));
+        Assertions.assertTrue(response.getBody().get(OrderStatusEnum.PRONTO).contains(3L));
     }
 
 }

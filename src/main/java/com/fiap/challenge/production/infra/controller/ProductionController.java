@@ -1,14 +1,19 @@
 package com.fiap.challenge.production.infra.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fiap.challenge.production.application.domain.models.Order;
+import com.fiap.challenge.production.application.domain.models.enums.OrderStatusEnum;
 import com.fiap.challenge.production.infra.service.ProductionService;
 
 @RestController
@@ -41,6 +46,13 @@ public class ProductionController {
 		Order orderResponse = productionService.finishOrder(orderNumber);
 		return ResponseEntity.status(HttpStatus.OK)
 				.body(orderResponse);
+	}
+	
+	@GetMapping("/orders")
+	public ResponseEntity<Map<OrderStatusEnum, List<Long>>> getOrders() {
+		Map<OrderStatusEnum, List<Long>> orders = productionService.listOrdersPrepareAndReady();
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(orders);
 	}
 
 }

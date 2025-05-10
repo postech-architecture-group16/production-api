@@ -10,13 +10,16 @@ import static org.mockito.Mockito.when;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.fiap.challenge.production.application.domain.models.Order;
@@ -113,4 +116,25 @@ class ProductionServiceTest {
         verify(productionRepository, times(1)).findByOrderNumber(123L);
         verify(productionRepository, times(1)).save(mockEntity);
     }
+    
+    @Test
+    void shouldListOrdersPrepareAndReadySuccessfully() {
+        List<ProductionEntity> mockEntities = List.of(
+            new ProductionEntity(UUID.randomUUID(),UUID.randomUUID(), 1001L, OrderStatusEnum.EM_PREPARACAO, null, null, LocalDateTime.now(),LocalDateTime.now()),
+            new ProductionEntity(UUID.randomUUID(),UUID.randomUUID(), 1002L, OrderStatusEnum.EM_PREPARACAO, null, null, LocalDateTime.now(),LocalDateTime.now()),
+            new ProductionEntity(UUID.randomUUID(),UUID.randomUUID(), 1003L, OrderStatusEnum.PRONTO, null, null, LocalDateTime.now(), LocalDateTime.now())
+        );
+
+        Mockito.when(productionRepository.findOrdersPrepareAndReady()).thenReturn(mockEntities);
+
+        Map<OrderStatusEnum, List<Long>> result = productionService.listOrdersPrepareAndReady();
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(2, result.get(OrderStatusEnum.EM_PREPARACAO).size());
+        Assertions.assertEquals(1, result.get(OrderStatusEnum.PRONTO).size());
+        Assertions.assertTrue(result.get(OrderStatusEnum.EM_PREPARACAO).contains(1001L));
+        Assertions.assertTrue(result.get(OrderStatusEnum.EM_PREPARACAO).contains(1002L));
+        Assertions.assertTrue(result.get(OrderStatusEnum.PRONTO).contains(1003L));
+    }
+    
 }
