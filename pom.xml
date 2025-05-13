@@ -94,6 +94,16 @@
 		<dependency>
 		   <groupId>org.springframework.boot</groupId>
 		   <artifactId>spring-boot-starter-amqp</artifactId>
+		   <exclusions>
+		     <exclusion>
+    		 	<groupId>com.rabbitmq</groupId>
+		        <artifactId>amqp-client</artifactId>
+		     </exclusion>
+		     <exclusion>
+		       <groupId>com.rabbitmq</groupId>
+		       <artifactId>stream-client</artifactId>
+		     </exclusion>
+           </exclusions>
 		</dependency>
 		<dependency>
 			<groupId>io.awspring.cloud</groupId>
